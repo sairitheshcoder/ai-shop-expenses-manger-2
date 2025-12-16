@@ -59,7 +59,7 @@
           <p class="hint">
             Example: “Bought sugar worth 500 for shop stock”
           </p>
-          <form method="post" action="{{ url_for('quick_add_ai') }}">
+          <form method="post" action="{{ url_for('add_expense') }}">
             <textarea name="ai_text" class="input textarea"
                       placeholder="Describe the expense in one sentence"></textarea>
             <button type="submit" class="btn-secondary">Let AI Fill</button>
