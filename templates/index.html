@@ -2,35 +2,114 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>AI Shop Expenses</title>
+  <title>AI Expense Planner for Small Shops</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
   <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
 </head>
 <body>
-  <!-- Navbar with logo and name -->
+  <!-- Top navbar with logo and title -->
   <header class="navbar">
-    <a href="{{ url_for('index') }}" class="brand">
-      <img src="{{ url_for('static', filename='img/logo.png') }}"
-           alt="AI Shop Expenses logo"
-           class="brand-logo">
-      <span class="brand-name">AI Shop Expenses</span>
-    </a>
-
-    <nav class="nav-links">
-      <a href="{{ url_for('index') }}">Home</a>
-      <a href="{{ url_for('login') }}">Login</a>
-      <a href="{{ url_for('register') }}">Register</a>
-    </nav>
+    <div class="navbar-inner">
+      <a href="{{ url_for('index') }}" class="brand">
+        <img src="{{ url_for('static', filename='img/logo.png') }}"
+             alt="AI Shop Expenses logo"
+             class="brand-logo">
+        <div class="brand-text">
+          <span class="brand-name">AI Shop Expenses</span>
+          <span class="brand-tagline">Planner for Small Shops</span>
+        </div>
+      </a>
+    </div>
   </header>
 
-  <!-- Main content -->
+  <!-- Main page content -->
   <main class="page">
-    <section class="hero">
-      <h1>Track your shop expenses with AI</h1>
-      <p>Upload bills, analyze spending, and manage your business smarter.</p>
-      <a href="{{ url_for('dashboard') }}" class="btn-primary">Go to Dashboard</a>
-    </section>
+    <h1 class="page-title">AI Expense Planner for Small Shops</h1>
+
+    <div class="layout">
+      <!-- Left: Add Expense card -->
+      <section class="card">
+        <h2 class="card-title">Add Expense</h2>
+
+        <form method="post" action="{{ url_for('add_expense') }}" class="form">
+          <label class="field-label">Date</label>
+          <input type="date" name="date" class="input">
+
+          <label class="field-label">Amount (₹)</label>
+          <input type="number" step="0.01" name="amount" class="input" placeholder="0.00">
+
+          <label class="field-label">Category</label>
+          <select name="category" class="input">
+            <option value="Stock purchase">Stock purchase</option>
+            <option value="Rent">Rent</option>
+            <option value="Utilities">Utilities</option>
+            <option value="Other">Other</option>
+          </select>
+
+          <label class="field-label">Description</label>
+          <input type="text" name="description" class="input"
+                 placeholder="e.g. Bought rice bags from wholesaler">
+
+          <button type="submit" class="btn-primary">Save Expense</button>
+        </form>
+
+        <div class="ai-quick">
+          <h3 class="section-subtitle">Quick Add with AI</h3>
+          <p class="hint">
+            Example: “Bought sugar worth 500 for shop stock”
+          </p>
+          <form method="post" action="{{ url_for('quick_add_ai') }}">
+            <textarea name="ai_text" class="input textarea"
+                      placeholder="Describe the expense in one sentence"></textarea>
+            <button type="submit" class="btn-secondary">Let AI Fill</button>
+          </form>
+        </div>
+      </section>
+
+      <!-- Right: Recent Expenses and Insights -->
+      <section class="card">
+        <h2 class="card-title">Recent Expenses</h2>
+
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Amount (₹)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for expense in expenses %}
+            <tr>
+              <td>{{ expense.date }}</td>
+              <td>{{ expense.description }}</td>
+              <td>{{ expense.category }}</td>
+              <td>{{ expense.amount }}</td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="4" class="empty">No expenses yet.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+
+        <div class="ai-insights">
+          <h3 class="section-subtitle">AI Insights</h3>
+          <form method="post" action="{{ url_for('generate_insights') }}">
+            <button type="submit" class="btn-primary small">Generate Insights</button>
+          </form>
+          {% if insights %}
+          <div class="insights-box">
+            <p>{{ insights }}</p>
+          </div>
+          {% endif %}
+        </div>
+      </section>
+    </div>
   </main>
 </body>
 </html>
+
