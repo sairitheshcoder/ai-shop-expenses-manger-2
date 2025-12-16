@@ -169,6 +169,7 @@ def ai_insights():
     insights = generate_insights(raw)
     return jsonify({"insights": insights})
 
-
 if __name__ == "__main__":
-    app.run(debug=True)
+    # app.run(debug=True)
+    pass
+
